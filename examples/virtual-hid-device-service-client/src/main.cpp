@@ -94,12 +94,12 @@ int main(void) {
             std::lock_guard<std::mutex> lock(client_mutex);
 
             if (client1) {
-              // key down (shift+e)
+
               {
 //                pqrs::karabiner::driverkit::virtual_hid_device_driver::hid_report::keyboard_input report;
                 pqrs::karabiner::driverkit::virtual_hid_device_driver::hid_report::apple_vendor_top_case_input report;
 //                report.keys.insert(type_safe::get(pqrs::hid::usage::keyboard_or_keypad::keyboard_e));
-                report.keys.insert(type_safe::get(pqrs::hid::usage::apple_vendor_top_case::illumination_up));
+                report.keys.insert(type_safe::get(pqrs::hid::usage::apple_vendor_top_case::illumination_up)); //TODO haven't tested illumination_toggle; first have to make the key just press once. in any case not rlly useful for my purposes
                 client1->async_post_report(report);
               }
 
