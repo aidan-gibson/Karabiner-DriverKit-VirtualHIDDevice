@@ -96,17 +96,17 @@ int main(void) {
             if (client1) {
               // key down (shift+e)
               {
-                pqrs::karabiner::driverkit::virtual_hid_device_driver::hid_report::keyboard_input report;
-//                report.modifiers.insert(pqrs::karabiner::driverkit::virtual_hid_device_driver::hid_report::modifier::left_shift);
-                report.keys.insert(type_safe::get(pqrs::hid::usage::keyboard_or_keypad::keyboard_e));
-                //                 report.keys.insert(type_safe::get(pqrs::hid::usage::apple_vendor_top_case::illumination_down));
+//                pqrs::karabiner::driverkit::virtual_hid_device_driver::hid_report::keyboard_input report;
+                pqrs::karabiner::driverkit::virtual_hid_device_driver::hid_report::apple_vendor_top_case_input report;
+//                report.keys.insert(type_safe::get(pqrs::hid::usage::keyboard_or_keypad::keyboard_e));
+                report.keys.insert(type_safe::get(pqrs::hid::usage::apple_vendor_top_case::illumination_down));
                 client1->async_post_report(report);
               }
 
 #if 0
               // key up
               {
-                pqrs::karabiner::driverkit::virtual_hid_device_driver::hid_report::keyboard_input report;
+                pqrs::karabiner::driverkit::virtual_hid_device_driver::hid_report::apple_vendor_top_case_input report;
                 client1->async_post_report(report);
               }
 #endif
