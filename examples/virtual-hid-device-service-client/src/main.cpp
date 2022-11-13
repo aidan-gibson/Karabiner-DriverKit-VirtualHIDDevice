@@ -35,7 +35,7 @@ int main(void) {
           client1->async_driver_loaded();
           client1->async_driver_version_matched();
           client1->async_virtual_hid_keyboard_ready();
-          client1->async_virtual_hid_pointing_ready();
+//          client1->async_virtual_hid_pointing_ready();
         }
 
         //        if (client2) {
@@ -54,8 +54,8 @@ int main(void) {
   std::unique_ptr<std::thread> keyboard_thread1;
   //  std::unique_ptr<std::thread> keyboard_thread2;
 
-  std::mutex pointing_thread_mutex;
-  std::unique_ptr<std::thread> pointing_thread1;
+//  std::mutex pointing_thread_mutex;
+//  std::unique_ptr<std::thread> pointing_thread1;
 
   //
   // client1
@@ -65,7 +65,7 @@ int main(void) {
     std::cout << "connected" << std::endl;
 
     client1->async_virtual_hid_keyboard_initialize(pqrs::hid::country_code::us);
-    client1->async_virtual_hid_pointing_initialize();
+//    client1->async_virtual_hid_pointing_initialize();
   });
   client1->connect_failed.connect([](auto&& error_code) {
     std::cout << "connect_failed " << error_code << std::endl;
@@ -130,34 +130,34 @@ int main(void) {
       }
     }
   });
-  client1->virtual_hid_pointing_ready_response.connect([&client1, &client_mutex, &pointing_thread1, &pointing_thread_mutex](auto&& ready) {
-    if (!pointing_thread1) {
-      std::cout << "virtual_hid_pointing_ready " << ready << std::endl;
-    }
-
-    if (ready) {
-      std::lock_guard<std::mutex> lock(pointing_thread_mutex);
-
-      if (!pointing_thread1) {
-        pointing_thread1 = std::make_unique<std::thread>([&client1, &client_mutex] {
-          for (int i = 0; i < 400; ++i) {
-            {
-              std::lock_guard<std::mutex> lock(client_mutex);
-
-              if (client1) {
-                pqrs::karabiner::driverkit::virtual_hid_device_driver::hid_report::pointing_input report;
-                report.x = static_cast<uint8_t>(cos(0.1 * i) * 20);
-                report.y = static_cast<uint8_t>(sin(0.1 * i) * 20);
-                client1->async_post_report(report);
-              }
-            }
-
-            std::this_thread::sleep_for(std::chrono::milliseconds(5));
-          }
-        });
-      }
-    }
-  });
+//  client1->virtual_hid_pointing_ready_response.connect([&client1, &client_mutex, &pointing_thread1, &pointing_thread_mutex](auto&& ready) {
+//    if (!pointing_thread1) {
+//      std::cout << "virtual_hid_pointing_ready " << ready << std::endl;
+//    }
+//
+//    if (ready) {
+//      std::lock_guard<std::mutex> lock(pointing_thread_mutex);
+//
+//      if (!pointing_thread1) {
+//        pointing_thread1 = std::make_unique<std::thread>([&client1, &client_mutex] {
+//          for (int i = 0; i < 400; ++i) {
+//            {
+//              std::lock_guard<std::mutex> lock(client_mutex);
+//
+//              if (client1) {
+//                pqrs::karabiner::driverkit::virtual_hid_device_driver::hid_report::pointing_input report;
+//                report.x = static_cast<uint8_t>(cos(0.1 * i) * 20);
+//                report.y = static_cast<uint8_t>(sin(0.1 * i) * 20);
+//                client1->async_post_report(report);
+//              }
+//            }
+//
+//            std::this_thread::sleep_for(std::chrono::milliseconds(5));
+//          }
+//        });
+//      }
+//    }
+//  });
 
   client1->async_start();
 
@@ -240,12 +240,12 @@ int main(void) {
     //    }
   }
 
-  {
-    std::lock_guard<std::mutex> lock(pointing_thread_mutex);
-    if (pointing_thread1) {
-      pointing_thread1->join();
-    }
-  }
+//  {
+//    std::lock_guard<std::mutex> lock(pointing_thread_mutex);
+//    if (pointing_thread1) {
+//      pointing_thread1->join();
+//    }
+//  }
 
   call_ready_thread.join();
 
